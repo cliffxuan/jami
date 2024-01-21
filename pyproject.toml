@@ -1,10 +1,12 @@
 [tool.poetry]
 name = "jami-cli"
-version = "0.2.0"
+version = "0.3.0"
 description = ""
 authors = ["Cliff Xuan <cliff.xuan@gmail.com>"]
 readme = "README.md"
+license = "MIT"
 packages = [{include = "jami"}]
+repository = "https://github.com/cliffxuan/jami-cli"
 
 [tool.poetry.dependencies]
 python = "^3.7"
