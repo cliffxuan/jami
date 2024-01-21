@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jami-cli"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Cliff Xuan <cliff.xuan@gmail.com>"]
 readme = "README.md"
