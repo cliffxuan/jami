@@ -1,8 +1,16 @@
+from importlib import metadata
+
 import typer
-from jami.encryption import password_decrypt, password_encrypt
 from typing_extensions import Annotated
 
+from jami.encryption import password_decrypt, password_encrypt
+
 cli = typer.Typer()
+
+
+@cli.command()
+def version():
+    typer.secho(metadata.version("jami-cli"), fg=typer.colors.GREEN)
 
 
 @cli.command()
@@ -13,7 +21,7 @@ def encrypt(
         typer.Option(prompt=True, confirmation_prompt=True, hide_input=True),
     ],
 ):
-    cypher = password_encrypt(text.encode("utf-8"), password)
+    cypher = password_encrypt(text.encode("utf-8"), password).decode("utf-8")
     typer.secho(cypher, fg=typer.colors.GREEN)
 
 
@@ -25,5 +33,5 @@ def decrypt(
         typer.Option(prompt=True, hide_input=True),
     ],
 ):
-    text = password_decrypt(cypher.encode("utf-8"), password)
+    text = password_decrypt(cypher.encode("utf-8"), password).decode("utf-8")
     typer.secho(text, fg=typer.colors.GREEN)

@@ -1,6 +1,6 @@
 # jami-cli
-![logo](logo.jpeg)
 A command line app for encrypting/decrypting text with a password
+![logo](logo.jpeg)
 
 ## install
 `pip install jami-cli`
