@@ -1,4 +1,5 @@
 # jami-cli
+![logo](logo.jpeg)
 A command line app for encrypting/decrypting text with a password
 
 ## install
