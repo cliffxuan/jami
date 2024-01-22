@@ -1,9 +1,10 @@
 import pytest
+
 from jami.encryption import (
+    InvalidCypher,
     WrongPassword,
     password_decrypt,
     password_encrypt,
-    InvalidCypher,
 )
 
 
