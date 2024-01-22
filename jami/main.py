@@ -2,8 +2,13 @@ from importlib import metadata
 
 import typer
 from typing_extensions import Annotated
-
-from jami.encryption import password_decrypt, password_encrypt
+import binascii
+from jami.encryption import (
+    password_decrypt,
+    password_encrypt,
+    InvalidCypher,
+    WrongPassword,
+)
 
 cli = typer.Typer()
 
@@ -33,5 +38,11 @@ def decrypt(
         typer.Option(prompt=True, hide_input=True),
     ],
 ):
-    text = password_decrypt(cypher.encode("utf-8"), password).decode("utf-8")
-    typer.secho(text, fg=typer.colors.GREEN)
+    try:
+        text = password_decrypt(cypher.encode("utf-8"), password).decode("utf-8")
+    except InvalidCypher:
+        typer.secho("invalid encrypted text", fg=typer.colors.RED)
+    except WrongPassword:
+        typer.secho("wrong password", fg=typer.colors.RED)
+    else:
+        typer.secho(text, fg=typer.colors.GREEN)

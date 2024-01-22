@@ -1,16 +1,26 @@
 """
 source: https://stackoverflow.com/a/55147077/243431
 """
+import binascii
 import secrets
-from base64 import urlsafe_b64encode as b64e, urlsafe_b64decode as b64d
+from base64 import urlsafe_b64decode as b64d
+from base64 import urlsafe_b64encode as b64e
 
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 backend = default_backend()
 iterations = 100_000
+
+
+class InvalidCypher(Exception):
+    pass
+
+
+class WrongPassword(Exception):
+    pass
 
 
 def _derive_key(password: bytes, salt: bytes, iterations: int = iterations) -> bytes:
@@ -41,8 +51,14 @@ def password_encrypt(
 
 
 def password_decrypt(token: bytes, password: str) -> bytes:
-    decoded = b64d(token)
+    try:
+        decoded = b64d(token)
+    except binascii.Error:
+        raise InvalidCypher(token)
     salt, iter, token = decoded[:16], decoded[16:20], b64e(decoded[20:])
     iterations = int.from_bytes(iter, "big")
     key = _derive_key(password.encode(), salt, iterations)
-    return Fernet(key).decrypt(token)
+    try:
+        return Fernet(key).decrypt(token)
+    except InvalidToken:
+        raise WrongPassword()
